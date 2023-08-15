@@ -1,9 +1,11 @@
 package com.reggie.core.handler;
 
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.reggie.core.context.Context;
 import com.reggie.core.context.ContextUtils;
+import com.reggie.core.modular.auth.model.dto.LoginUser;
 import com.reggie.core.modular.common.enums.YesOrNoEnum;
 import com.reggie.core.modular.common.model.entity.BaseDO;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +22,15 @@ public class SetBasicInfoHandler implements MetaObjectHandler {
         Object o = metaObject.getOriginalObject();
         if (o instanceof BaseDO) {
             BaseDO baseDO = (BaseDO) o;
-            //TODO 上下文判断是否更新人员id相关字段
+            LoginUser currentUser = ContextUtils.getCurrentUser();
+            if (currentUser != null) {
+                if (StrUtil.isBlank(baseDO.getCreateId())) {
+                    baseDO.setCreateId(currentUser.getId());
+                }
+                if (StrUtil.isBlank(baseDO.getUpdateId())) {
+                    baseDO.setUpdateId(currentUser.getId());
+                }
+            }
             if (baseDO.getCreateTime() == null) {
                 baseDO.setCreateTime(DateUtil.date());
             }
@@ -41,7 +51,12 @@ public class SetBasicInfoHandler implements MetaObjectHandler {
         Object o = metaObject.getOriginalObject();
         if (o instanceof BaseDO) {
             BaseDO baseDO = (BaseDO) o;
-            //TODO 上下文判断是否更新人员id相关字段
+            LoginUser currentUser = ContextUtils.getCurrentUser();
+            if (currentUser != null) {
+                if (StrUtil.isBlank(baseDO.getUpdateId())) {
+                    baseDO.setUpdateId(currentUser.getId());
+                }
+            }
             if (baseDO.getUpdateTime() == null) {
                 baseDO.setUpdateTime(DateUtil.date());
             }

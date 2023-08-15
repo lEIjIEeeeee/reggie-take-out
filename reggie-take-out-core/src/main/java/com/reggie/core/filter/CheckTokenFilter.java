@@ -92,7 +92,7 @@ public class CheckTokenFilter extends OncePerRequestFilter {
     private void setContextInfo(HttpServletRequest request, LoginUser loginUser) {
         checkLoginUserInfo(loginUser);
         ContextUtils.setContext(Context.builder()
-                            .currentUser(loginUser)
+                                       .currentUser(loginUser)
                                        .build());
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginUser, null, loginUser.getAuthorities());

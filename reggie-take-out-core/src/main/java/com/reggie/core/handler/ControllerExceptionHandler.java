@@ -37,7 +37,7 @@ public class ControllerExceptionHandler {
         if (CollUtil.isNotEmpty(errorList)) {
             StringBuilder errorMsg = new StringBuilder("校验失败：");
             for (FieldError fieldError : errorList) {
-                errorMsg.append(fieldError.getObjectName())
+                errorMsg.append(fieldError.getField())
                         .append("：")
                         .append(fieldError.getDefaultMessage())
                         .append("，");
