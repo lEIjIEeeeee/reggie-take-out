@@ -12,7 +12,7 @@
     <result column="avatar" jdbcType="VARCHAR" property="avatar" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="phone" jdbcType="VARCHAR" property="phone" />
-    <result column="gender" jdbcType="INTEGER" property="gender" />
+    <result column="gender" jdbcType="VARCHAR" property="gender" />
     <result column="email" jdbcType="VARCHAR" property="email" />
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="version" jdbcType="INTEGER" property="version" />

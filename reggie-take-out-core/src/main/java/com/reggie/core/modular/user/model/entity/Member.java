@@ -70,11 +70,11 @@ public class Member extends BaseDO {
     private String realName;
 
     /**
-     * 性别 0-女 1-男
+     * 性别 F-女 M-男（字典）
      */
     @TableField(value = "gender")
-    @ApiModelProperty(value="性别 0-女 1-男")
-    private Integer gender;
+    @ApiModelProperty(value="性别 F-女 M-男（字典）")
+    private String gender;
 
     /**
      * 生日

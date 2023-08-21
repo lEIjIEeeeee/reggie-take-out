@@ -11,7 +11,7 @@
     <result column="phone" jdbcType="VARCHAR" property="phone" />
     <result column="register_type" jdbcType="INTEGER" property="registerType" />
     <result column="real_name" jdbcType="VARCHAR" property="realName" />
-    <result column="gender" jdbcType="INTEGER" property="gender" />
+    <result column="gender" jdbcType="VARCHAR" property="gender" />
     <result column="birthday" jdbcType="TIMESTAMP" property="birthday" />
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="last_login_time" jdbcType="TIMESTAMP" property="lastLoginTime" />

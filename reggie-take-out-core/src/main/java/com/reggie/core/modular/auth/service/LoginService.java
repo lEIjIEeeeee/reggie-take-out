@@ -126,7 +126,7 @@ public class LoginService {
         }
     }
 
-    private String encryptPwd(String password, String salt) {
+    public static String encryptPwd(String password, String salt) {
         if (StrUtil.isBlank(password)) {
             throw new BizException(HttpResultCode.BIZ_DATA_EXCEPTION, "用户密码为空！");
         }
