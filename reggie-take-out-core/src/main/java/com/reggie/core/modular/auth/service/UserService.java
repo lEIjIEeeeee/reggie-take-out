@@ -9,10 +9,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.reggie.common.enums.HttpResultCode;
 import com.reggie.common.exception.BizException;
 import com.reggie.core.context.ContextUtils;
-import com.reggie.core.modular.auth.model.request.SetUpRolesRequest;
-import com.reggie.core.modular.auth.model.request.UserAddRequest;
-import com.reggie.core.modular.auth.model.request.UserEditRequest;
+import com.reggie.core.modular.auth.model.dto.UserDetailDTO;
+import com.reggie.core.modular.auth.model.request.*;
 import com.reggie.core.modular.auth.util.AuthNoGenerateUtils;
+import com.reggie.core.modular.common.enums.EnableOrDisableEnum;
 import com.reggie.core.modular.common.model.request.BaseQueryRequest;
 import com.reggie.core.modular.user.dao.MemberMapper;
 import com.reggie.core.modular.user.dao.UserMapper;
@@ -28,6 +28,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 @Slf4j
@@ -41,6 +43,10 @@ public class UserService {
     public Page<User> listPage(BaseQueryRequest request) {
         return userMapper.selectPage(PageUtils.createPage(request), Wrappers.lambdaQuery(User.class)
                                                                             .orderByDesc(User::getUpdateTime));
+    }
+
+    public User get(String id) {
+        return userManager.getUserByIdWithExp(id);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -110,6 +116,20 @@ public class UserService {
     }
 
     @Transactional(rollbackFor = Exception.class)
+    public void delete(UserIdRequest request) {
+        User user = userManager.getUserByIdWithExp(request.getId());
+        userMapper.update(User.builder()
+                              .build(), Wrappers.lambdaUpdate(User.class)
+                                                .set(User::getStatus, UserStatusEnum.DELETE.getCode())
+                                                .set(User::getUpdateId, ContextUtils.getCurrentUserId())
+                                                .set(User::getUpdateTime, DateUtil.date())
+                                                .eq(User::getId, user.getId()));
+
+        Member member = memberManager.getMemberByIdWithExp(request.getId());
+        memberMapper.deleteByIdWithFill(member);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
     public void setUpRoles(SetUpRolesRequest request) {
         if (CollUtil.isEmpty(request.getRoleIds())) {
             return;
@@ -125,6 +145,41 @@ public class UserService {
                                                 .set(User::getUpdateId, ContextUtils.getCurrentUserId())
                                                 .set(User::getUpdateTime, DateUtil.date())
                                                 .eq(User::getId, request.getUserId()));
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void setUserIsEnable(ActiveOrFreezeUserRequest request) {
+        String userId = ContextUtils.getCurrentUserId();
+
+        int status = ObjectUtil.equal(EnableOrDisableEnum.ENABLE, request.getOperation())
+                ? UserStatusEnum.NORMAL.getCode()
+                : UserStatusEnum.FREEZE.getCode();
+
+        User user = userManager.getUserByIdWithExp(request.getId());
+        userMapper.update(User.builder()
+                              .build(), Wrappers.lambdaUpdate(User.class)
+                                                .set(User::getStatus, status)
+                                                .set(User::getUpdateId, userId)
+                                                .set(User::getUpdateTime, DateUtil.date())
+                                                .eq(User::getId, user.getId()));
+
+        Member member = memberManager.getMemberByIdWithExp(request.getId());
+        memberMapper.update(Member.builder()
+                                  .build(), Wrappers.lambdaUpdate(Member.class)
+                                                    .set(Member::getStatus, status)
+                                                    .eq(Member::getId, member.getId()));
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void resetPassword(UserIdRequest request) {
+        User user = userManager.getUserByIdWithExp(request.getId());
+        String encryptPwd = LoginService.encryptPwd(user.getPhone(), user.getSalt());
+        userMapper.update(User.builder()
+                              .build(), Wrappers.lambdaUpdate(User.class)
+                                                .set(User::getPassword, encryptPwd)
+                                                .set(User::getUpdateId, ContextUtils.getCurrentUserId())
+                                                .set(User::getUpdateTime, DateUtil.date())
+                                                .eq(User::getId, request.getId()));
     }
 
 }

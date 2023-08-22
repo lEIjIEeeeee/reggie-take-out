@@ -57,9 +57,7 @@ public class SetBasicInfoHandler implements MetaObjectHandler {
                     baseDO.setUpdateId(currentUser.getId());
                 }
             }
-            if (baseDO.getUpdateTime() == null) {
-                baseDO.setUpdateTime(DateUtil.date());
-            }
+            baseDO.setUpdateTime(DateUtil.date());
         } else {
             strictUpdateFill(metaObject, BaseDO.UPDATE_TIME, Date.class, DateUtil.date());
         }

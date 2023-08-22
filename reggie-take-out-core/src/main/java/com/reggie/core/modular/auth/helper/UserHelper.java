@@ -3,8 +3,11 @@ package com.reggie.core.modular.auth.helper;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.reggie.core.modular.auth.dao.RoleMapper;
+import com.reggie.core.modular.auth.model.dto.UserDetailDTO;
 import com.reggie.core.modular.auth.model.entity.Role;
 import com.reggie.core.modular.auth.model.response.UserResponse;
+import com.reggie.core.modular.user.manager.MemberManager;
+import com.reggie.core.modular.user.model.entity.Member;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +21,8 @@ import java.util.stream.Collectors;
 public class UserHelper {
 
     private final RoleMapper roleMapper;
+
+    private final MemberManager memberManager;
 
     public void fillRoleInfoData(List<UserResponse> dataList) {
         if (CollUtil.isEmpty(dataList)) {
@@ -59,6 +64,13 @@ public class UserHelper {
                 response.setRoleNames(String.join(StrUtil.COMMA, roleNameList));
             }
         }
+    }
+
+    public void fillUserDetailData(UserDetailDTO userDetailDTO) {
+        Member member = memberManager.getMemberByIdWithExp(userDetailDTO.getId());
+        userDetailDTO.setNickName(member.getNickName())
+                     .setRealName(member.getRealName())
+                     .setBirthday(member.getBirthday());
     }
 
 }
