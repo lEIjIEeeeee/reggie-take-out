@@ -6,25 +6,23 @@
     <!--@Table sys_menu-->
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="pid" jdbcType="VARCHAR" property="pid" />
-    <result column="pids" jdbcType="VARCHAR" property="pids" />
     <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="pcode" jdbcType="VARCHAR" property="pcode" />
+    <result column="pcodes" jdbcType="VARCHAR" property="pcodes" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="url" jdbcType="VARCHAR" property="url" />
     <result column="menu_flag" jdbcType="INTEGER" property="menuFlag" />
     <result column="system_type" jdbcType="VARCHAR" property="systemType" />
-    <result column="status" jdbcType="INTEGER" property="status" />
     <result column="sort" jdbcType="INTEGER" property="sort" />
     <result column="levels" jdbcType="INTEGER" property="levels" />
-    <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="create_id" jdbcType="VARCHAR" property="createId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_id" jdbcType="VARCHAR" property="updateId" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="is_del" jdbcType="INTEGER" property="isDel" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, pid, pids, code, `name`, url, menu_flag, system_type, `status`, sort, levels, 
-    remark, create_id, create_time, update_id, update_time, is_del
+    id, pid, code, pcode, pcodes, `name`, url, menu_flag, system_type,
+    sort, levels, create_id, create_time, update_id, update_time
   </sql>
 </mapper>

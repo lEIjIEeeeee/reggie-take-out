@@ -12,10 +12,10 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserIdRequest {
+public class MenuIdRequest {
 
-    @ApiModelProperty(value = "id")
-    @NotBlank(message = "用户id不能为空")
+    @ApiModelProperty(value = "菜单id")
+    @NotBlank(message = "菜单id不能为空")
     private String id;
 
 }

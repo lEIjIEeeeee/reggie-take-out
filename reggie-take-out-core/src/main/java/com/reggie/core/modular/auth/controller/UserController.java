@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotBlank;
 
-@Api(tags = "用户模块-员工管理相关接口")
+@Api(tags = "用户模块-员工信息管理接口")
 @Validated
 @Slf4j
 @AllArgsConstructor

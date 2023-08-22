@@ -22,7 +22,6 @@ import com.reggie.core.modular.auth.model.entity.RoleMenuRel;
 import com.reggie.core.modular.auth.model.request.LoginRequest;
 import com.reggie.core.modular.common.constant.RedisKeyConstants;
 import com.reggie.core.modular.common.constant.SystemConstants;
-import com.reggie.core.modular.common.enums.EnableOrDisableStatusEnum;
 import com.reggie.core.modular.common.enums.YesOrNoEnum;
 import com.reggie.core.modular.user.dao.MemberMapper;
 import com.reggie.core.modular.user.enums.UserStatusEnum;
@@ -184,8 +183,7 @@ public class LoginService {
                                              .collect(Collectors.toSet());
         List<Menu> menuList = menuMapper.selectList(Wrappers.lambdaQuery(Menu.class)
                                                             .in(Menu::getId, menuIds)
-                                                            .eq(Menu::getMenuFlag, YesOrNoEnum.Y.getCode())
-                                                            .eq(Menu::getStatus, EnableOrDisableStatusEnum.ENABLE.getCode()));
+                                                            .eq(Menu::getMenuFlag, YesOrNoEnum.Y.getCode()));
         if (CollUtil.isEmpty(menuList)) {
             return;
         }
