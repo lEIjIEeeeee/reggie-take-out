@@ -9,6 +9,8 @@ import com.reggie.common.exception.BizException;
 import com.reggie.core.modular.auth.dao.RoleMapper;
 import com.reggie.core.modular.auth.dao.RoleMenuRelMapper;
 import com.reggie.core.modular.auth.manager.RoleManager;
+import com.reggie.core.modular.auth.manager.RoleMenuRelManager;
+import com.reggie.core.modular.auth.model.dto.RoleRelationMenusDTO;
 import com.reggie.core.modular.auth.model.entity.Role;
 import com.reggie.core.modular.auth.model.entity.RoleMenuRel;
 import com.reggie.core.modular.auth.model.request.RoleQueryRequest;
@@ -22,7 +24,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -30,8 +34,9 @@ import java.util.List;
 public class RoleService {
 
     private final RoleMapper roleMapper;
-    private final RoleManager roleManager;
     private final RoleMenuRelMapper roleMenuRelMapper;
+    private final RoleManager roleManager;
+    private final RoleMenuRelManager roleMenuRelManager;
 
     public Page<Role> listPage(RoleQueryRequest request) {
         return roleMapper.selectPage(PageUtils.createPage(request), Wrappers.lambdaQuery(Role.class)
@@ -70,6 +75,15 @@ public class RoleService {
         if (CollUtil.isEmpty(request.getMenuIdList())) {
             return;
         }
+
+        List<RoleMenuRel> roleMenuRelOldList = roleMenuRelManager.listRelByRole(role.getId());
+        if (CollUtil.isNotEmpty(roleMenuRelOldList)) {
+            List<String> ids = roleMenuRelOldList.stream().map(RoleMenuRel::getId).collect(Collectors.toList());
+            roleMenuRelMapper.deleteBatchWithFill(RoleMenuRel.builder()
+                                                             .build(), Wrappers.lambdaQuery(RoleMenuRel.class)
+                                                                               .in(RoleMenuRel::getId, ids));
+        }
+
         List<RoleMenuRel> roleMenuRelList = CollUtil.newArrayList();
         for (String menuId : request.getMenuIdList()) {
             RoleMenuRel roleMenuRel = RoleMenuRel.builder()
@@ -83,6 +97,21 @@ public class RoleService {
             throw new BizException(HttpResultCode.BIZ_DATA_EXCEPTION);
         }
         roleMenuRelMapper.insertBatchSomeColumn(roleMenuRelList);
+    }
+
+    public RoleRelationMenusDTO listMenuIdsByRole(String id) {
+        Role role = roleManager.getByIdWithExp(id);
+        List<RoleMenuRel> roleMenuRelList = roleMenuRelManager.listRelByRole(role.getId());
+
+        List<String> menuIdList = Collections.emptyList();
+        if (CollUtil.isNotEmpty(roleMenuRelList)) {
+            menuIdList = roleMenuRelList.stream()
+                                        .map(RoleMenuRel::getMenuId)
+                                        .collect(Collectors.toList());
+        }
+        return RoleRelationMenusDTO.builder()
+                                   .menuIdList(menuIdList)
+                                   .build();
     }
 
 }

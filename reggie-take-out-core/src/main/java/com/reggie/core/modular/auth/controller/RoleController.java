@@ -3,6 +3,7 @@ package com.reggie.core.modular.auth.controller;
 import com.reggie.common.model.HttpResult;
 import com.reggie.core.modular.auth.helper.RoleHelper;
 import com.reggie.core.modular.auth.model.dto.RoleDetailDTO;
+import com.reggie.core.modular.auth.model.dto.RoleRelationMenusDTO;
 import com.reggie.core.modular.auth.model.request.RoleQueryRequest;
 import com.reggie.core.modular.auth.model.request.RoleRequest;
 import com.reggie.core.modular.auth.model.request.SetUpRolePermissionsRequest;
@@ -77,6 +78,12 @@ public class RoleController {
     public HttpResult<Void> setUpRolePermissions(@RequestBody @Validated SetUpRolePermissionsRequest request) {
         roleService.setUpRolePermissions(request);
         return HttpResult.success();
+    }
+
+    @ApiOperation(value = "查询角色菜单权限设置信息")
+    @GetMapping("/listMenuIdsByRole")
+    public HttpResult<RoleRelationMenusDTO> listMenuIdsByRole(@RequestParam @NotBlank String id) {
+        return HttpResult.success(roleService.listMenuIdsByRole(id));
     }
 
 }

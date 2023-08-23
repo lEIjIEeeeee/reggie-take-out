@@ -2,7 +2,6 @@ package com.reggie.core.modular.auth.controller;
 
 import cn.hutool.core.lang.tree.Tree;
 import com.reggie.common.model.HttpResult;
-import com.reggie.core.modular.auth.helper.MenuHelper;
 import com.reggie.core.modular.auth.model.dto.MenuDetailDTO;
 import com.reggie.core.modular.auth.model.request.MenuAddRequest;
 import com.reggie.core.modular.auth.model.request.MenuEditRequest;
@@ -27,8 +26,6 @@ import javax.validation.constraints.NotBlank;
 public class MenuController {
 
     private final MenuService menuService;
-
-    private final MenuHelper menuHelper;
 
     @ApiOperation(value = "查询获取菜单完整树")
     @GetMapping("/getMenuFullTree")
