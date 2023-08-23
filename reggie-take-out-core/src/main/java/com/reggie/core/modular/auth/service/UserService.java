@@ -9,7 +9,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.reggie.common.enums.HttpResultCode;
 import com.reggie.common.exception.BizException;
 import com.reggie.core.context.ContextUtils;
-import com.reggie.core.modular.auth.model.dto.UserDetailDTO;
 import com.reggie.core.modular.auth.model.request.*;
 import com.reggie.core.modular.auth.util.AuthNoGenerateUtils;
 import com.reggie.core.modular.common.enums.EnableOrDisableEnum;
@@ -27,8 +26,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @AllArgsConstructor

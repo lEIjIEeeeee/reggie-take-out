@@ -61,6 +61,12 @@ public class MenuService {
     @Transactional(rollbackFor = Exception.class)
     public void add(MenuAddRequest request) {
         String userId = ContextUtils.getCurrentUserId();
+
+        Menu menuByCode = menuManager.getMenuByCode(request.getCode());
+        if (ObjectUtil.isNotNull(menuByCode)) {
+            throw new BizException(HttpResultCode.DATA_EXISTED);
+        }
+
         Menu menu = JavaBeanUtils.map(request, Menu.class);
         menu.setMenuFlag(request.getMenuFlag().getCode())
             .setSystemType(request.getSystemType().name())

@@ -78,7 +78,9 @@ public class RoleService {
 
         List<RoleMenuRel> roleMenuRelOldList = roleMenuRelManager.listRelByRole(role.getId());
         if (CollUtil.isNotEmpty(roleMenuRelOldList)) {
-            List<String> ids = roleMenuRelOldList.stream().map(RoleMenuRel::getId).collect(Collectors.toList());
+            List<String> ids = roleMenuRelOldList.stream()
+                                                 .map(RoleMenuRel::getId)
+                                                 .collect(Collectors.toList());
             roleMenuRelMapper.deleteBatchWithFill(RoleMenuRel.builder()
                                                              .build(), Wrappers.lambdaQuery(RoleMenuRel.class)
                                                                                .in(RoleMenuRel::getId, ids));
