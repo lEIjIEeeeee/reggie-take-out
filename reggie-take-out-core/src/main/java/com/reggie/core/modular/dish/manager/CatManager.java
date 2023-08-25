@@ -1,6 +1,7 @@
 package com.reggie.core.modular.dish.manager;
 
 import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.reggie.common.enums.HttpResultCode;
 import com.reggie.common.exception.BizException;
 import com.reggie.core.modular.dish.dao.CatMapper;
@@ -24,6 +25,11 @@ public class CatManager {
             throw new BizException(HttpResultCode.DATA_NOT_EXISTED);
         }
         return cat;
+    }
+
+    public Cat getCatByName(String name) {
+        return catMapper.selectOne(Wrappers.lambdaQuery(Cat.class)
+                                           .eq(Cat::getName, name));
     }
 
 }
